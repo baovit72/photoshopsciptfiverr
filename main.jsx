@@ -1,25 +1,32 @@
 ﻿/*********************************************************SETUP*************************************************************************/
 //Step 1: You need to set layer prefixes that will be grouped in combinations.
-const allowedPrefixes = ["HandDemo", "HatDemo", "MaskDemo","JacketDemo","VestDemo","BottomDemo"];
+const allowedPrefixes = [
+  "HandDemo",
+  "HatDemo",
+  "MaskDemo",
+  "JacketDemo",
+  "VestDemo",
+  "BottomDemo",
+];
 
 //Step 2: You need to set the export folder.
 const rawExportFolder = "C:/NiRIFE Studio/Fiverr/PTS AUTOMATION 1ST/output";
 
- //Step 3: Enter resume id (the last file number in export folder - default:: -1 )
- const lastId =  -1;
- 
- /*******************************************************FOR DEV LOG*************************************************************************/
- 
- var isDev = false;
- 
+//Step 3: Enter resume id (the last file number in export folder - default:: -1 )
+const lastId = -1;
+
+/*******************************************************FOR DEV LOG*************************************************************************/
+
+var isDev = false;
+
 /********************************************************HELPERS**********************************************************************/
-function findItemInArray(array, cb){
-        for(var i = 0; i<array.length; i++){ 
-             var item = array[i];
-             if(cb(item)) return item;
-            }
-        return null;
-   }
+function findItemInArray(array, cb) {
+  for (var i = 0; i < array.length; i++) {
+    var item = array[i];
+    if (cb(item)) return item;
+  }
+  return null;
+}
 
 function convertFilePath(filePath) {
   if (filePath.indexOf("~") != -1) return filePath;
@@ -52,8 +59,8 @@ function collectAllLayers(doc, allLayers) {
     var theLayer = doc.layers[m];
     var layerName = theLayer.name;
     if (theLayer.typename === "ArtLayer") {
-      var groupName = findItemInArray(allowedPrefixes,function proc(p) {
-        return layerName.indexOf(p+"_") === 0;
+      var groupName = findItemInArray(allowedPrefixes, function proc(p) {
+        return layerName.indexOf(p + "_") === 0;
       });
       if (groupName) {
         !allLayers[groupName] && (allLayers[groupName] = []);
@@ -74,13 +81,13 @@ function exportToPNG(doc, fileDir) {
   doc.saveAs(new File(fileDir), jpgOptions, true, Extension.LOWERCASE);
 }
 
-function getIndexArray(length){
-    var array = [];
-    for(var i = 0; i< length; i++){
-        array[i] = -1;
-        }
-    return array;
-   }
+function getIndexArray(length) {
+  var array = [];
+  for (var i = 0; i < length; i++) {
+    array[i] = -1;
+  }
+  return array;
+}
 
 /*******************************************************MAIN*********************************************************************/
 
@@ -91,7 +98,6 @@ var exportFolder = rawExportFolder;
 var folderObj = new Folder(exportFolder);
 if (!folderObj.exists) folderObj.create();
 
-
 //Get all layers by group
 var allLayers = collectAllLayers(doc, alllLayers);
 
@@ -99,33 +105,31 @@ var indexes = getIndexArray(allowedPrefixes.length);
 
 var numOfCombinations = 1;
 
-for(var i = 0 ; i<indexes.length; i++){
-    isDev && $.writeln(allLayers[allowedPrefixes[i]].length);
-    numOfCombinations *= allLayers[allowedPrefixes[i]].length;
- }
+for (var i = 0; i < indexes.length; i++) {
+  isDev && $.writeln(allLayers[allowedPrefixes[i]].length);
+  numOfCombinations *= allLayers[allowedPrefixes[i]].length;
+}
 
 isDev && $.writeln(numOfCombinations);
 
-for(var i = 0; i< numOfCombinations; i++){
-    var nextIncrease = true;
-    for(var j = 0; j< indexes.length; j++){
-                if(nextIncrease || indexes[j] == -1 ){
-                    i > lastId && indexes[j]>=0 && (allLayers[allowedPrefixes[j]][indexes[j]].visible = false);
-                    indexes[j]++;
-                     if(indexes[j] === allLayers[allowedPrefixes[j]].length){
-                        nextIncrease = true;
-                        indexes[j] = 0;
-                    }
-                    else {
-                        nextIncrease = false;
-                        }
-                    i > lastId && (allLayers[allowedPrefixes[j]][indexes[j]].visible = true);
-                  }
-                 
-               
-        }
-    i > lastId && exportToPNG(doc, exportFolder + "/" + i + ".jpg");
- }
+for (var i = 0; i < numOfCombinations; i++) {
+  var nextIncrease = true;
+  for (var j = 0; j < indexes.length; j++) {
+    if (nextIncrease || indexes[j] == -1) {
+      indexes[j] >= 0 &&
+        (allLayers[allowedPrefixes[j]][indexes[j]].visible = false);
+      indexes[j]++;
+      if (indexes[j] === allLayers[allowedPrefixes[j]].length) {
+        nextIncrease = true;
+        indexes[j] = 0;
+      } else {
+        nextIncrease = false;
+      }
+      allLayers[allowedPrefixes[j]][indexes[j]].visible = true;
+    }
+  }
+  i > lastId && exportToPNG(doc, exportFolder + "/" + i + ".jpg");
+}
 
 /*
  for (var m = 0; m < 10 || allLayers.length; m++){
