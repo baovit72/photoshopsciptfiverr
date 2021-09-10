@@ -1,0 +1,15 @@
+{
+  "name": "ptsautomation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "merger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.8.0",
+    "merge-images": "^2.0.0"
+  }
+}

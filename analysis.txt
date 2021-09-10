@@ -1,0 +1,9 @@
+Hat : 37 layers
+Mask: 2 layers
+Chest: 3 layers
+Hand: 22 layers
+Jacket: 13 layers
+Vest: 8 layers
+Undershirt: 13 layers
+Pant: 3 layers
+Bottom: 2 layers
