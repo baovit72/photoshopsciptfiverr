@@ -10,7 +10,7 @@ const allowedPrefixes = [
 ];
 
 //Step 2: You need to set the export folder.
-const rawExportFolder = "C:/NiRIFE Studio/Fiverr/PTS AUTOMATION 1ST/output";
+const rawExportFolder = "C:/NiRIFE Studio/Fiverr/PTS AUTOMATION/output";
 
 //Step 3: Enter resume id (the last file number in export folder - default:: -1 )
 const lastId = -1;
@@ -131,9 +131,3 @@ for (var i = 0; i < numOfCombinations; i++) {
   i > lastId && exportToPNG(doc, exportFolder + "/" + i + ".jpg");
 }
 
-/*
- for (var m = 0; m < 10 || allLayers.length; m++){
-     allLayers[m].visible = true; 
-    
- } 
- */
